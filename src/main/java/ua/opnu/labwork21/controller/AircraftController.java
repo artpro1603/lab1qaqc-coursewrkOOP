@@ -14,6 +14,7 @@ import ua.opnu.labwork21.dto.ApiErrorResponse;
 import ua.opnu.labwork21.dto.request.AircraftCreateRequest;
 import ua.opnu.labwork21.dto.request.AircraftUpdateRequest;
 import ua.opnu.labwork21.dto.response.AircraftResponse;
+import ua.opnu.labwork21.dto.response.FlightResponse;
 import ua.opnu.labwork21.model.Flight;
 import ua.opnu.labwork21.service.AircraftService;
 
@@ -110,7 +111,7 @@ public class AircraftController {
             content = @Content(schema = @Schema(implementation = ApiErrorResponse.class)))
     })
     @GetMapping("/{id}/flights")
-    public ResponseEntity<List<Flight>> getFlights(@PathVariable Long id) {
+    public ResponseEntity<List<FlightResponse>> getFlights(@PathVariable Long id) {
         return ResponseEntity.ok(aircraftService.getFlightsByAircraft(id));
     }
 }
