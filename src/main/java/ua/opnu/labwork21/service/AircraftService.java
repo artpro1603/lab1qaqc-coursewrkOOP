@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ua.opnu.labwork21.dto.request.AircraftCreateRequest;
 import ua.opnu.labwork21.dto.request.AircraftUpdateRequest;
 import ua.opnu.labwork21.dto.response.AircraftResponse;
+import ua.opnu.labwork21.dto.response.FlightResponse;
 import ua.opnu.labwork21.exception.ConflictOperationException;
 import ua.opnu.labwork21.exception.ResourceNotFoundException;
 import ua.opnu.labwork21.model.Aircraft;
@@ -58,9 +59,22 @@ public class AircraftService {
         aircraftRepository.delete(aircraft);
     }
 
-    public List<Flight> getFlightsByAircraft(Long aircraftId) {
+    public List<FlightResponse> getFlightsByAircraft(Long aircraftId) {
         findById(aircraftId);
-        return flightRepository.findByAircraftId(aircraftId);
+        return flightRepository.findByAircraftId(aircraftId).stream()
+                .map(this::toFlightResponse)
+                .toList();
+    }
+
+    private FlightResponse toFlightResponse(Flight flight) {
+        return new FlightResponse(
+                flight.getId(),
+                flight.getFlightNumber(),
+                flight.getDepartureCity(),
+                flight.getArrivalCity(),
+                flight.getDepartureTime(),
+                flight.getAircraft() != null ? flight.getAircraft().getId() : null
+        );
     }
 
     private Aircraft findById(Long id) {
